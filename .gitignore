@@ -1,0 +1,30 @@
+# Local Python environment and generated files
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+*.tmp
+
+# Secrets and local configuration
+.env
+
+# Private/derived research data and generated model artifacts
+data/processed/*
+!data/processed/.gitkeep
+data/samples/*
+!data/samples/.gitkeep
+artifacts/models/*
+!artifacts/models/.gitkeep
+artifacts/experiments/*
+!artifacts/experiments/.gitkeep
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local preparation probes
+_c03_patch_probe.txt
