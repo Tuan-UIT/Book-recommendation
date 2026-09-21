@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ book['title'] }}{% endblock %}
+{% block content %}
+<article class="detail">
+  <div class="detail-copy">
+    <p class="eyebrow">Chi tiết sách</p>
+    <h1>{{ book['title'] }}</h1>
+    <p class="muted">Tác giả: {{ authors|map(attribute='display_name')|join(', ') or 'Chưa rõ' }}</p>
+    <div class="chips">{% for genre in genres %}<span class="chip">{{ genre['label'] }}</span>{% endfor %}</div>
+    <p class="detail-description">{{ book['description'] or 'Sách này chưa có mô tả. Hệ thống vẫn có thể dùng tác giả và thể loại.' }}</p>
+  </div>
+  <aside class="panel">
+    <h2>Đánh giá của bạn</h2>
+    {% if current_account %}
+      <form method="post" action="{{ url_for('rate_book', item_id=book['canonical_item_id']) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label class="form-field">Điểm từ 1 đến 5
+          <select name="rating" required><option value="" {% if not rating %}selected{% endif %} disabled>Chưa chọn điểm</option>{% for value in range(1, 6) %}<option value="{{ value }}" {% if rating and rating['rating'] == value %}selected{% endif %}>{{ value }}</option>{% endfor %}</select>
+        </label>
+        <input type="hidden" name="next" value="{{ request.path }}"><button class="button">Lưu đánh giá</button>
+      </form>
+      {% if rating %}<form class="delete-rating" method="post" action="{{ url_for('delete_rating', item_id=book['canonical_item_id']) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="next" value="{{ request.path }}"><button class="button danger">Xóa đánh giá</button></form>{% endif %}
+    {% else %}<p><a href="{{ url_for('login', next=request.path) }}">Đăng nhập</a> để chấm điểm.</p>{% endif %}
+  </aside>
+</article>
+{% endblock %}

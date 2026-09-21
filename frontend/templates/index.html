@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Hệ thống khuyến nghị sách{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Đồ án khuyến nghị sách · 24540033</p>
+    <h1>Một cuốn sách mới đang chờ bạn khám phá.</h1>
+    <p>Chọn thể loại yêu thích, đánh giá sách đã đọc và xem tối đa mười gợi ý có lý do rõ ràng.</p>
+    <div class="actions">
+      <a class="button" href="{{ url_for('books') }}">Khám phá sách</a>
+      {% if current_account %}<a class="button secondary" href="{{ url_for('recommendations') }}">Xem gợi ý</a>{% else %}<a class="button secondary" href="{{ url_for('register') }}">Tạo tài khoản</a>{% endif %}
+    </div>
+  </div>
+  <div class="hero-art" role="img" aria-label="Minh họa hai cuốn sách trên nền màu nâu"></div>
+</section>
+{% endblock %}

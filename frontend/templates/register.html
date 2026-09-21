@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Đăng ký{% endblock %}
+{% block content %}
+<section class="narrow"><p class="eyebrow">Bắt đầu đọc</p><h1>Tạo tài khoản</h1><p class="muted">Đánh giá sách và lưu sở thích riêng của bạn.</p><form class="panel" method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label class="form-field">Email<input name="email" type="email" value="{{ request.form.get('email', '') }}" required autocomplete="email"></label>
+  <label class="form-field">Mật khẩu<input name="password" type="password" minlength="8" required autocomplete="new-password"></label>
+  <button class="button" type="submit">Tạo tài khoản</button>
+</form><p class="muted">Đã có tài khoản? <a href="{{ url_for('login') }}">Đăng nhập</a>.</p></section>
+{% endblock %}

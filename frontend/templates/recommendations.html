@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Gợi ý dành cho bạn{% endblock %}
+{% block content %}
+<div class="section-head">
+  <p class="eyebrow">Dành riêng cho bạn</p>
+  <h1>Gợi ý dành cho bạn</h1>
+  <p class="muted">Có tối đa 10 sách chưa được bạn đánh giá. Chọn phương pháp để so sánh trên cùng hồ sơ và danh mục.</p>
+</div>
+<nav class="method-tabs" aria-label="Phương pháp khuyến nghị">
+  <a href="{{ url_for('recommendations', method='popularity') }}" {% if method == 'popularity' %}aria-current="page"{% endif %}>Phổ biến</a>
+  <a href="{{ url_for('recommendations', method='cf') }}" {% if method == 'cf' %}aria-current="page"{% endif %}>Lọc cộng tác</a>
+  <a href="{{ url_for('recommendations', method='content') }}" {% if method == 'content' %}aria-current="page"{% endif %}>Theo nội dung</a>
+  <a href="{{ url_for('recommendations', method='hybrid') }}" {% if method == 'hybrid' %}aria-current="page"{% endif %}>Kết hợp</a>
+</nav>
+<p class="notice">Phương pháp đang xem: <strong>{{ {'popularity':'Phổ biến','cf':'Lọc cộng tác','content':'Theo nội dung','hybrid':'Kết hợp'}[method] }}</strong>. {% if method == 'hybrid' and hybrid_alpha == 0 %}Trong cấu hình hiện tại, nội dung quyết định thứ tự khi có điểm hợp lệ; lọc cộng tác chỉ hỗ trợ khi thiếu điểm nội dung.{% endif %}</p>
+<p id="recommendation-status" role="status">Đang hiển thị {{ recommendations|length }} gợi ý{% if recommendations|length < 10 %}; danh mục hiện không còn đủ 10 sách hợp lệ{% endif %}.</p>
+<ol class="recommendations" id="recommendation-list" data-method="{{ method }}">
+  {% for item in recommendations %}
+    <li class="recommendation-card">
+      <span class="rank">{{ '%02d'|format(loop.index) }}</span>
+      <div>
+        <h2><a href="{{ url_for('book_detail', item_id=item['canonical_item_id']) }}">{{ item['title'] }}</a></h2>
+        <p class="muted">{{ item['authors']|join(', ') or 'Tác giả chưa rõ' }}{% if item['genres'] %} · {{ item['genres']|join(', ') }}{% endif %}</p>
+        <p>{{ item['description'][:170] ~ ('…' if item['description']|length > 170 else '') if item['description'] else 'Chưa có mô tả.' }}</p>
+        <p class="reason"><strong>Lý do:</strong> {{ item['reason'] }}</p>
+        {% if item['source'] == 'popularity_fallback' %}<p class="muted">Gợi ý dự phòng theo độ phổ biến trong tập huấn luyện.</p>{% endif %}
+      </div>
+      <form class="rating-inline" method="post" action="{{ url_for('rate_book', item_id=item['canonical_item_id']) }}" data-async-rating data-item-id="{{ item['canonical_item_id'] }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="next" value="{{ request.full_path }}">
+        <label>Đánh giá<select class="rating-select" name="rating" required><option value="" selected disabled>Chọn điểm</option>{% for value in range(1,6) %}<option value="{{ value }}">{{ value }}</option>{% endfor %}</select></label>
+        <button class="button" type="submit">Lưu</button>
+      </form>
+    </li>
+  {% else %}<li>Không còn sách hợp lệ để gợi ý.</li>{% endfor %}
+</ol>
+{% endblock %}

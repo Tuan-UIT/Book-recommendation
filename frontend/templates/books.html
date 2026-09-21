@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Tìm sách{% endblock %}
+{% block content %}
+<div class="section-head"><p class="eyebrow">Danh mục</p><h1>Khám phá sách</h1><p class="muted">Tìm theo tên sách, tác giả hoặc thể loại.</p></div>
+<form class="search" method="get"><label class="form-field" for="q">Từ khóa<input id="q" name="q" value="{{ query }}" maxlength="100" placeholder="Tên sách, tác giả, thể loại"></label><button class="button">Tìm</button></form>
+<p class="muted">Đang hiển thị {{ books|length }} sách{% if books|length == 50 %} đầu tiên{% endif %}.</p>
+<div class="book-grid">
+{% for book in books %}
+  <article class="book-card"><div class="book-placeholder" aria-hidden="true"></div><h2><a href="{{ url_for('book_detail', item_id=book['canonical_item_id']) }}">{{ book['title'] }}</a></h2><p>{{ book['description'][:110] ~ ('…' if book['description']|length > 110 else '') if book['description'] else 'Chưa có mô tả.' }}</p><p class="book-meta">{{ book_authors.get(book['canonical_item_id'], [])|join(', ') or 'Tác giả chưa rõ' }}</p></article>
+{% else %}<p>Không tìm thấy sách phù hợp.</p>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Sở thích ban đầu{% endblock %}
+{% block content %}
+<section class="narrow"><p class="eyebrow">Hồ sơ đọc</p><h1>Thể loại yêu thích</h1><p class="muted">Lựa chọn này giúp tạo gợi ý khi bạn chưa có đủ đánh giá. Bạn có thể bỏ trống để xem sách phổ biến.</p>
+<form method="post" class="panel"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><div class="choice-grid">{% for genre in genres %}<label class="choice"><input type="checkbox" name="genres" value="{{ genre['genre_id'] }}" {% if genre['genre_id'] in selected %}checked{% endif %}><span>{{ genre['label'] }}</span></label>{% endfor %}</div><button class="button">Lưu sở thích</button></form></section>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Hồ sơ của bạn{% endblock %}
+{% block content %}
+<div class="section-head"><p class="eyebrow">Hồ sơ đọc</p><h1>Đánh giá của bạn</h1><p class="muted">{{ current_account['email'] }} · {{ ratings|length }} sách đã đánh giá</p></div>
+<div class="actions"><a class="button" href="{{ url_for('preferences') }}">Chỉnh sở thích</a><a class="button secondary" href="{{ url_for('recommendations') }}">Xem gợi ý</a></div>
+<div class="book-grid profile-books">
+  {% for row in ratings %}<article class="book-card"><div class="book-placeholder" aria-hidden="true"></div><h2><a href="{{ url_for('book_detail', item_id=row['canonical_item_id']) }}">{{ row['title'] }}</a></h2><p class="book-meta">Điểm của bạn: {{ row['rating'] }}/5</p></article>
+  {% else %}<p>Bạn chưa đánh giá sách nào. <a href="{{ url_for('books') }}">Khám phá danh mục</a> để bắt đầu.</p>{% endfor %}
+</div>
+{% endblock %}

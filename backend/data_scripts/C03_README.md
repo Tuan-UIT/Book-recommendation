@@ -28,7 +28,10 @@ Split policy:
 The output directory is private and ignored by Git. It contains the three
 split files, `user_cohorts.csv`, training-only item/user statistics, and JSON
 manifests with hashes and integrity checks. Validation and test rows are never
-used to compute those statistics or to make model-selection decisions.
+used to compute the training statistics or fit the models. Validation results
+later select `k`, the common-item overlap threshold, `alpha`, and any other
+tuned settings. Test data remain untouched until the configuration is frozen
+for the final four-method comparison.
 
 Run the focused checks with:
 

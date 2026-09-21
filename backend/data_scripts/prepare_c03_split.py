@@ -29,7 +29,7 @@ COLS = [
     "resolution_reason",
 ]
 NAMES = ("train", "validation", "test")
-VERSION = "c03-split-v2"
+VERSION = "c03-split-v3"
 
 
 def write_json(path: Path, value: dict) -> None:
@@ -342,8 +342,12 @@ def validate(
             "item_stats_sha256": digest(item_stats),
             "user_stats_rows": int(len(user_stats)),
             "user_stats_sha256": digest(user_stats),
-            "fit_and_model_selection_input": "train_ratings.csv only",
-            "validation_and_test_are_never_used_for_fit_or_selection": True,
+            "model_fit_input": "train_ratings.csv only",
+            "validation_use": (
+                "select k, common-item overlap threshold, alpha, and any other "
+                "tuned settings"
+            ),
+            "test_use": "untouched until the frozen comparison",
         },
         "integrity_checks": checks,
     }

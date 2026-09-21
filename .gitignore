@@ -9,6 +9,13 @@ htmlcov/
 
 # Secrets and local configuration
 .env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite3
+*.db
+*.joblib
+*.pkl
 
 # Private/derived research data and generated model artifacts
 data/processed/*

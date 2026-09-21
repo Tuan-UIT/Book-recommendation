@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Gợi ý sách{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="{{ url_for('index') }}">Marginalia<span class="brand-subtitle">gợi ý sách cho người đọc</span></a>
+      <nav class="site-nav" aria-label="Điều hướng chính">
+        <a href="{{ url_for('books') }}" {% if request.endpoint == 'books' %}aria-current="page"{% endif %}>Khám phá</a>
+        {% if current_account %}
+          <a href="{{ url_for('recommendations') }}" {% if request.endpoint == 'recommendations' %}aria-current="page"{% endif %}>Dành cho bạn</a>
+          <a href="{{ url_for('preferences') }}" {% if request.endpoint == 'preferences' %}aria-current="page"{% endif %}>Sở thích</a>
+          <a href="{{ url_for('profile') }}" {% if request.endpoint == 'profile' %}aria-current="page"{% endif %}>Hồ sơ</a>
+          <form action="{{ url_for('logout') }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="link-button">Đăng xuất</button></form>
+        {% else %}
+          <a href="{{ url_for('login') }}">Đăng nhập</a>
+          <a href="{{ url_for('register') }}">Đăng ký</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+  <main class="page" id="main-content">
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+      <p class="flash {{ category }}" role="status">{{ message }}</p>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">Dữ liệu demo tự tạo, không phải kết quả nghiên cứu Goodreads.</footer>
+  <script src="{{ url_for('static', filename='js/site.js') }}" defer></script>
+</body>
+</html>
